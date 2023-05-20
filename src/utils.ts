@@ -80,7 +80,7 @@ export const getRate = (currency: string, date: Date): Promise<Rate> =>
   fetch(
     `https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?valcode=${currency}&date=${format(
       date,
-      "yyyymmdd"
+      "yyyyMMdd"
     )}&json`
   )
     .then((it) => it.json())

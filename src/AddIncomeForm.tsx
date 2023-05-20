@@ -128,7 +128,7 @@ export default function AddIncomeForm(props: Props) {
           type="text"
           placeholder="dd.mm.yyyy"
           value={dateString}
-          onChange={(e) => setDateString(e.target.value)}
+          onChange={(e) => setDateString(e.target.value.trim())}
           onKeyDown={handleKeyDown}
         />
         <label className="text-lg text-[#444444]">Currency</label>
