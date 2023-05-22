@@ -8,18 +8,30 @@ type Props = {
 };
 
 export default function Incomes({ removeById, incomes }: Props) {
+  if (!incomes.length) {
+    return (
+      <>
+        <div className="h-full hidden sm:flex justify-center items-center">
+          <span className="text-lg sm:text-3xl text-[#888888]">
+            Add some transactions first
+          </span>
+        </div>
+      </>
+    );
+  }
   return (
     <>
       <div className="flex justify-center flex-col">
         {incomes.map(({ id, date, currency, amount, rate, uah }) => (
           <div
             key={id}
-            className="flex justify-between items-center text-[#444444]"
+            className="flex justify-between items-center text-base sm:text-xl text-[#444444]"
           >
-            <span className="text-base">
-              {`${date}: ${amount}${csm.currencySymbolMap[currency]} * ${rate}`}
+            <span>
+              {/* {`${date}: ${amount}${csm.currencySymbolMap[currency]} * ${rate}`} */}
+              {`${date}`}
             </span>
-            <div className="text-base flex items-center gap-1">
+            <div className="flex items-center gap-1">
               <span className="cursor-pointer" onClick={copyToClipboard(uah)}>
                 {uah}₴
               </span>

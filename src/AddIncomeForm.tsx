@@ -80,7 +80,7 @@ export default function AddIncomeForm(props: Props) {
 
   return (
     <>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 w-full sm:w-auto">
         <Button
           klass="text-[#FFFFFF] bg-[#000000] hover:bg-[#303436] active:bg-[#1A1C1D]"
           onClick={() => monoInputRef.current && monoInputRef.current.click()}
@@ -122,44 +122,50 @@ export default function AddIncomeForm(props: Props) {
             props.onSubmit(incomes);
           }}
         />
-        <label className="text-lg text-[#444444]">Date</label>
-        <Input
-          isError={errors.includes("date")}
-          type="text"
-          placeholder="dd.mm.yyyy"
-          value={dateString}
-          onChange={(e) => setDateString(e.target.value.trim())}
-          onKeyDown={handleKeyDown}
-        />
-        <label className="text-lg text-[#444444]">Currency</label>
-        <select
-          className="p-1 border-solid border-2 rounded-md border-[#888888]"
-          value={currency}
-          onChange={(e) => setCurrency(e.target.value)}
-        >
-          <option key="USD" value="USD">
-            USD
-          </option>
-          <option key="EUR" value="EUR">
-            EUR
-          </option>
-          {Object.keys(csm.currencySymbolMap)
-            .filter((it) => !["USD", "EUR"].includes(it))
-            .map((key) => (
-              <option key={key} value={key}>
-                {key}
-              </option>
-            ))}
-        </select>
-        <label className="text-lg text-[#444444]">Amount</label>
-        <Input
-          isError={errors.includes("amount")}
-          type="number"
-          placeholder="1488.24"
-          value={amount || ""}
-          onChange={(e) => setAmount(parseFloat(e.target.value))}
-          onKeyDown={handleKeyDown}
-        />
+        <div className="flex flex-col">
+          <label className="text-lg text-[#444444]">Date</label>
+          <Input
+            isError={errors.includes("date")}
+            type="text"
+            placeholder="dd.mm.yyyy"
+            value={dateString}
+            onChange={(e) => setDateString(e.target.value.trim())}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="text-lg text-[#444444]">Currency</label>
+          <select
+            className="p-1 border-solid border-2 rounded-md border-[#888888]"
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value)}
+          >
+            <option key="USD" value="USD">
+              USD
+            </option>
+            <option key="EUR" value="EUR">
+              EUR
+            </option>
+            {Object.keys(csm.currencySymbolMap)
+              .filter((it) => !["USD", "EUR"].includes(it))
+              .map((key) => (
+                <option key={key} value={key}>
+                  {key}
+                </option>
+              ))}
+          </select>
+        </div>
+        <div className="flex flex-col">
+          <label className="text-lg text-[#444444]">Amount</label>
+          <Input
+            isError={errors.includes("amount")}
+            type="number"
+            placeholder="1488.24"
+            value={amount || ""}
+            onChange={(e) => setAmount(parseFloat(e.target.value))}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
         <Button
           klass="text-[#FFFFFF] bg-[#0088FF] hover:bg-[#0077D7] active:bg-[#005FA3]"
           onClick={onSumbit}

@@ -26,15 +26,17 @@ export default function TaxDetails({ incomes }: Props) {
   }
   return (
     <>
-      <div className="flex justify-center flex-col text-base border-t-[1px]">
+      <div className="flex justify-center flex-col text-base sm:text-xl border-t-[1px]">
         <div className="flex justify-between">
           <span>Sum to declare</span>
-          <span className="cursor-pointer" onClick={copyToClipboard(sum)}>{sum}₴</span>
+          <span className="cursor-pointer" onClick={copyToClipboard(sum)}>
+            {sum}₴
+          </span>
         </div>
         <div className="flex justify-between">
           <span>Tax to pay</span>
           <span className="cursor-pointer" onClick={copyToClipboard(tax)}>
-            {sum}₴ / 5% = {tax}₴
+            {tax}₴
           </span>
         </div>
       </div>
