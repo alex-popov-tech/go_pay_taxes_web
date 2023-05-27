@@ -7,6 +7,7 @@ import {
   parsePrivatXls,
   toDate,
   validate,
+  taxFor,
 } from "./utils";
 
 type Props = {
@@ -49,8 +50,6 @@ export default function AddIncomeForm(props: Props) {
   const monoInputRef = useRef<HTMLInputElement>(null);
   const privatInputRef = useRef<HTMLInputElement>(null);
 
-  console.log({ dateString, currency, amount, errors });
-
   const onSumbit = async () => {
     const date = toDate(dateString);
     const errors = await validate({ date, amount });
@@ -60,13 +59,16 @@ export default function AddIncomeForm(props: Props) {
       return;
     }
 
-    const rate = await getRate(currency, date);
+    const rate = await getRate(currency, date).then((it) => it.rate);
+    const uah = Number((amount * rate).toFixed(2));
+    const tax = taxFor(uah);
     const income = {
-      date: dateString,
+      date,
       currency,
       amount,
-      rate: rate.rate,
-      uah: Number((amount * rate.rate).toFixed(2)),
+      rate,
+      uah,
+      tax,
     };
 
     props.onSubmit([income]);
@@ -80,9 +82,9 @@ export default function AddIncomeForm(props: Props) {
 
   return (
     <>
-      <div className="flex flex-col gap-3 w-full sm:w-auto">
+      <div className="w-fit flex flex-col gap-3 w-full md:w-44">
         <Button
-          klass="text-[#FFFFFF] bg-[#000000] hover:bg-[#303436] active:bg-[#1A1C1D]"
+          klass="transition-all text-[#FFFFFF] bg-[#000000] hover:bg-[#303436] active:bg-[#1A1C1D]"
           onClick={() => monoInputRef.current && monoInputRef.current.click()}
         >
           Upload mono csv
@@ -102,7 +104,7 @@ export default function AddIncomeForm(props: Props) {
           }}
         />
         <Button
-          klass="text-[#E8E6E3] bg-[#5E8C1E] hover:bg-[#48760D] active:bg-[#3E5C11]"
+          klass="transition-all text-[#E8E6E3] bg-[#5E8C1E] hover:bg-[#48760D] active:bg-[#3E5C11]"
           onClick={() =>
             privatInputRef.current && privatInputRef.current.click()
           }
@@ -167,7 +169,7 @@ export default function AddIncomeForm(props: Props) {
           />
         </div>
         <Button
-          klass="text-[#FFFFFF] bg-[#0088FF] hover:bg-[#0077D7] active:bg-[#005FA3]"
+          klass="transition-all text-[#FFFFFF] bg-[#0088FF] hover:bg-[#0077D7] active:bg-[#005FA3]"
           onClick={onSumbit}
         >
           Add Income

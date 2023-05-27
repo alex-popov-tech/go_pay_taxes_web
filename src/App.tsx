@@ -1,31 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddIncomeForm from "./AddIncomeForm";
 import { Income, IncomeDTO } from "./types";
 import _ from "lodash";
-import IncomeDetails from "./IncomeDetails";
+import Incomes from "./Incomes";
 
-function Footer() {
+function Note() {
   return (
-    <p className="text-xs text-center text-gray-400">
-      This app uses{" "}
-      <a className="underline" href="https://bank.gov.ua/ua/open-data/api-dev">
-        official nbu api
-      </a>{" "}
-      for getting currency rates for a specific dates. If something is not
-      working as intended, please open an{" "}
-      <a
-        className="underline"
-        href="https://github.com/alex-popov-tech/go_pay_taxes_web/issues"
-      >
-        issue
-      </a>{" "}
-      on Github.
-    </p>
+    <div className="w-full flex flex-col text-center text-xs text-gray-400">
+      <p>
+        This app uses{" "}
+        <a
+          className="underline"
+          href="https://bank.gov.ua/ua/open-data/api-dev"
+        >
+          official nbu api
+        </a>{" "}
+        for getting currency rates for a specific dates.
+      </p>
+      <p>
+        If something is not working as intended, please open an{" "}
+        <a
+          className="underline"
+          href="https://github.com/alex-popov-tech/go_pay_taxes_web/issues"
+        >
+          issue
+        </a>{" "}
+        on Github.
+      </p>
+    </div>
   );
 }
 
 export default function App() {
   const [incomes, setIncomes] = useState<Income[]>([]);
+
+  useEffect(() => {
+    console.log(incomes);
+  }, [incomes]);
 
   const addNewIncome = (newIncomes: IncomeDTO[]) =>
     setIncomes([
@@ -40,13 +51,13 @@ export default function App() {
   return (
     <>
       <div className="h-screen w-screen flex justify-center items-center">
-        <main className="h-fit w-72 sm:w-160 p-3 bg-[#FDFDFD] rounded-lg">
-          <h1 className="text-center text-3xl sm:text-4xl">Go pay taxes!</h1>
-          <section className="my-3 flex flex-wrap gap-3 sm:gap-5">
+        <main className="h-fit w-4/5 md:w-fit p-3 bg-[#FDFDFD] rounded-lg">
+          <h1 className="text-center text-4xl">Go pay taxes!</h1>
+          <section className="w-auto my-3 flex flex-wrap max-md:flex-col max-md:items-center gap-5">
             <AddIncomeForm onSubmit={addNewIncome} />
-            <IncomeDetails incomes={incomes} removeById={removeById} />
+            <Incomes incomes={incomes} removeById={removeById} />
           </section>
-          <Footer />
+          <Note />
         </main>
       </div>
     </>

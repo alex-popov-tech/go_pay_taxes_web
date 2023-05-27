@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { IncomeDTO, Rate } from "./types";
+import { Income, IncomeDTO, Rate } from "./types";
 // @ts-ignore
 import * as XLSX from "xlsjs";
 import { format } from "date-fns";
@@ -19,19 +19,21 @@ export const parseMonoCsv = (csv: string): IncomeDTO[] => {
 
   const incomes = lines.map((line) => {
     // "03.01.2023 17:08:27" => 03.01.2023
-    const date = line.split(",")[0].replaceAll('"', "").split(" ")[0];
+    const date = toDate(line.split(",")[0].replaceAll('"', "").split(" ")[0]);
 
     // cut values around currency to avoid messing with characters in 'name'
     // 3900.41,1000.0,EUR,39.0041
     const matches = line.match(/[\d.]+,[\d.]+,[A-Z]{3},[\d.]+/g);
 
     const [uah, amount, currency, rate] = (matches![0] || "").split(",");
+    const tax = taxFor(Number(uah));
     return {
       date,
       uah: Number(uah),
       amount: Number(amount),
       currency,
       rate: Number(rate),
+      tax,
     };
   });
   return incomes;
@@ -46,11 +48,12 @@ export const parsePrivatXls = (array: ArrayBuffer): IncomeDTO[] => {
   return rows
     .filter((cells) => cells[3] && cells[3] > 0)
     .map(([_, date, , amount, currency, rate, uah]) => ({
-      date,
+      date: toDate(date),
       amount,
       currency,
       rate: parseFloat(rate.replace(",", ".")),
       uah: parseFloat(uah.replace(",", ".")),
+      tax: taxFor(parseFloat(uah.replace(",", "."))),
     }));
 };
 
@@ -85,3 +88,21 @@ export const getRate = (currency: string, date: Date): Promise<Rate> =>
   )
     .then((it) => it.json())
     .then((rates) => rates[0]);
+
+const PERCENT_TAX = 5;
+
+export const taxFor = (sum: number) =>
+  Number(((PERCENT_TAX * sum) / 100).toFixed(2));
+
+export const sumOf = (incomes: Income[], mapper: (it: Income) => number) =>
+  Number(
+    incomes
+      .map(mapper)
+      .reduce((acc, it) => acc + it, 0)
+      .toFixed(2)
+  );
+
+export const prettyPrint = (num: number): string => {
+  const formattedNum = num.toLocaleString("en");
+  return formattedNum.replace(/,/g, " ");
+};

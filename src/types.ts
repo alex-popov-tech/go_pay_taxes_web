@@ -1,10 +1,11 @@
 export type Income = {
   id: string;
-  date: string;
+  date: Date;
   currency: string;
   amount: number;
   rate: number;
   uah: number;
+  tax: number;
 };
 
 export type IncomeDTO = Omit<Income, 'id'>;
