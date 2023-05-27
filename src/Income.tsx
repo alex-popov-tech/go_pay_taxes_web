@@ -1,6 +1,6 @@
 import { Income as IncomeType } from "./types";
 import csm from "currency-symbol-map";
-import { copyToClipboard, prettyPrint } from "./utils";
+import { prettyPrint } from "./utils";
 import { format } from "date-fns";
 
 type Props = {
@@ -24,7 +24,6 @@ export default function Income({
       </div>
       <div
         className="whitespace-nowrap cursor-pointer text-[#444444]"
-        onClick={copyToClipboard(uah)}
       >
         {prettyPrint(uah)}₴
       </div>

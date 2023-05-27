@@ -1,11 +1,8 @@
 import { z } from "zod";
 import { Income, IncomeDTO, Rate } from "./types";
+import { format } from "date-fns";
 // @ts-ignore
 import * as XLSX from "xlsjs";
-import { format } from "date-fns";
-
-export const copyToClipboard = (text: string | number) => () =>
-  navigator.clipboard.writeText(String(text));
 
 export const parseMonoCsv = (csv: string): IncomeDTO[] => {
   const lines = csv
