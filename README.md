@@ -14,6 +14,8 @@ You can generate information for declaring incomes and paying taxes by [uploadin
 
 Check out points `1` and `2`. If you use `monobank` or `privatbank` to accept payments, you can generate statements (`csv` for `monobank`, `xls` for `privatbank`) and upload them, to prefill incomes list.  
 
+![monobank](https://user-images.githubusercontent.com/21224705/240196334-d1bd8146-52dc-4309-bbff-3789cfe30137.png)
+![privatbank](https://user-images.githubusercontent.com/21224705/240196027-840a811d-1bf8-4288-8c08-6946467b9623.png)
 
 ### How to add incomes manually
 
