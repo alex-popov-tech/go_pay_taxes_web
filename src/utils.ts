@@ -89,7 +89,7 @@ export const getRate = (currency: string, date: Date): Promise<Rate> =>
 const PERCENT_TAX = 5;
 
 export const taxFor = (sum: number) =>
-  Number(((PERCENT_TAX * sum) / 100).toFixed(2));
+  Number(((PERCENT_TAX * sum) / 100).toFixed(3));
 
 export const sumOf = (incomes: Income[], mapper: (it: Income) => number) =>
   Number(
