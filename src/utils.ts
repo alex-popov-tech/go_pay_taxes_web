@@ -89,7 +89,7 @@ export const getRate = (currency: string, date: Date): Promise<Rate> =>
 const PERCENT_TAX = 5;
 
 export const taxFor = (sum: number) =>
-  Number(((PERCENT_TAX * sum) / 100).toFixed(2));
+  Number(((PERCENT_TAX * sum) / 100));
 
 export const sumOf = (incomes: Income[], mapper: (it: Income) => number) =>
   Number(
@@ -100,6 +100,8 @@ export const sumOf = (incomes: Income[], mapper: (it: Income) => number) =>
   );
 
 export const prettyPrint = (num: number): string => {
-  const formattedNum = num.toLocaleString("en");
-  return formattedNum.replace(/,/g, " ");
+  const rounded = Number(num.toFixed(2));
+  const formattedNum = rounded.toLocaleString("en").replace(/,/g, ' ');
+  const decimalPart = formattedNum.split(".")[1];
+  return decimalPart && decimalPart.length === 1 ? formattedNum + "0" : formattedNum;
 };

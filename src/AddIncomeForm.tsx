@@ -60,7 +60,7 @@ export default function AddIncomeForm(props: Props) {
     }
 
     const rate = await getRate(currency, date).then((it) => it.rate);
-    const uah = Number((amount * rate).toFixed(2));
+    const uah = Number((amount * rate));
     const tax = taxFor(uah);
     const income = {
       date,
