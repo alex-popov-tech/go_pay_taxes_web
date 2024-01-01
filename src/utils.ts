@@ -88,20 +88,16 @@ export const getRate = (currency: string, date: Date): Promise<Rate> =>
 
 const PERCENT_TAX = 5;
 
-export const taxFor = (sum: number) =>
-  Number(((PERCENT_TAX * sum) / 100));
+export const taxFor = (sum: number) => Number((PERCENT_TAX * sum) / 100);
 
 export const sumOf = (incomes: Income[], mapper: (it: Income) => number) =>
-  Number(
-    incomes
-      .map(mapper)
-      .reduce((acc, it) => acc + it, 0)
-      .toFixed(2)
-  );
+  Number(incomes.map(mapper).reduce((acc, it) => acc + it, 0));
 
 export const prettyPrint = (num: number): string => {
   const rounded = Number(num.toFixed(2));
-  const formattedNum = rounded.toLocaleString("en").replace(/,/g, ' ');
+  const formattedNum = rounded.toLocaleString("en").replace(/,/g, " ");
   const decimalPart = formattedNum.split(".")[1];
-  return decimalPart && decimalPart.length === 1 ? formattedNum + "0" : formattedNum;
+  return decimalPart && decimalPart.length === 1
+    ? formattedNum + "0"
+    : formattedNum;
 };

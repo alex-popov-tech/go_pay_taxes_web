@@ -23,10 +23,8 @@ export default function Incomes({ removeById, incomes }: Props) {
   return (
     <>
       <section className="w-full md:w-128 flex flex-col">
-        <div className="grid grid-cols-[repeat(3,1fr)_1rem] md:grid-cols-[90px_5rem_repeat(3,1fr)_1rem] justify-items-start md:justify-items-end gap-x-2 text-sm md:text-base text-[#444444]">
-          <span className="hidden md:inline font-semibold justify-self-start">
-            Date
-          </span>
+        <div className="grid grid-cols-[repeat(3,1fr)_1rem] md:grid-cols-[2fr_repeat(3,1fr)_2fr_1rem] justify-items-start md:justify-items-start gap-x-4 text-sm md:text-base text-[#444444]">
+          <span className="hidden md:inline font-semibold">Date</span>
           <span className="hidden md:inline font-semibold">Rate</span>
           <span className="font-semibold">Currency</span>
           <span className="font-semibold">UAH</span>

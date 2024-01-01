@@ -22,9 +22,7 @@ export default function Income({
         {prettyPrint(amount)}
         {csm.currencySymbolMap[currency]}
       </div>
-      <div
-        className="whitespace-nowrap cursor-pointer text-[#444444]"
-      >
+      <div className="whitespace-nowrap text-[#444444]">
         {prettyPrint(uah)}₴
       </div>
       <span className="text-[#444444]">{prettyPrint(tax)}₴</span>

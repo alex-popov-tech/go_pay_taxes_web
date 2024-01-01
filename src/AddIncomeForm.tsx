@@ -60,7 +60,8 @@ export default function AddIncomeForm(props: Props) {
     }
 
     const rate = await getRate(currency, date).then((it) => it.rate);
-    const uah = Number((amount * rate));
+    const uah = Number(amount * rate);
+
     const tax = taxFor(uah);
     const income = {
       date,
@@ -100,6 +101,7 @@ export default function AddIncomeForm(props: Props) {
             const array = await file.arrayBuffer();
             const decoder = new TextDecoder("utf-8");
             const incomes = parseMonoCsv(decoder.decode(array));
+
             props.onSubmit(incomes);
           }}
         />
@@ -115,7 +117,7 @@ export default function AddIncomeForm(props: Props) {
           className="hidden"
           ref={privatInputRef}
           type="file"
-          accept=".xls"
+          accept=".xls,.xlsx"
           onChange={async (e) => {
             const files = e.target.files as FileList;
             const file = files[0];
