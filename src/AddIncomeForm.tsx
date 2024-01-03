@@ -4,7 +4,7 @@ import { IncomeDTO } from "./types";
 import {
   getRate,
   parseMonoCsv,
-  parsePrivatXls,
+  parsePrivatCsv,
   toDate,
   validate,
   taxFor,
@@ -111,18 +111,19 @@ export default function AddIncomeForm(props: Props) {
             privatInputRef.current && privatInputRef.current.click()
           }
         >
-          Upload privat xls
+          Upload privat csv
         </Button>
         <input
           className="hidden"
           ref={privatInputRef}
           type="file"
-          accept=".xls,.xlsx"
+          accept=".csv"
           onChange={async (e) => {
             const files = e.target.files as FileList;
             const file = files[0];
             const array = await file.arrayBuffer();
-            const incomes = parsePrivatXls(array);
+            const decoder = new TextDecoder("utf-8");
+            const incomes = await parsePrivatCsv(decoder.decode(array));
             props.onSubmit(incomes);
           }}
         />

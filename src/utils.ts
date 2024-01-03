@@ -36,22 +36,44 @@ export const parseMonoCsv = (csv: string): IncomeDTO[] => {
   return incomes;
 };
 
-export const parsePrivatXls = (array: ArrayBuffer): IncomeDTO[] => {
-  const workbook = (XLSX as any).read(array, { type: "array" });
-  const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-  const rows: Array<Array<any>> = XLSX.utils.sheet_to_json(worksheet, {
-    header: 1,
-  });
-  return rows
-    .filter((cells) => cells[3] && cells[3] > 0)
-    .map(([_, date, , amount, currency, rate, uah]) => ({
-      date: toDate(date),
-      amount,
-      currency,
-      rate: parseFloat(rate.replace(",", ".")),
-      uah: parseFloat(uah.replace(",", ".")),
-      tax: taxFor(parseFloat(uah.replace(",", "."))),
-    }));
+export const parsePrivatCsv = async (csv: string): Promise<IncomeDTO[]> => {
+  const lines = csv
+    .split("\n")
+    // cut header
+    .slice(1)
+    // cut last empty line
+    .filter((it) => it)
+    .map((row) => {
+      console.log({ row });
+
+      const chunks = row.split(";");
+      const currency = chunks[3];
+      const date = toDate(chunks[5]);
+      const amount = Number(chunks[11].replaceAll(/\s/g, ""));
+      console.log({ currency, date, amount });
+
+      return { currency, date, amount };
+    })
+    // cut sell operations
+    .filter((it) => it.amount > 0);
+  console.log(lines);
+
+  const incomes = await Promise.all(
+    lines.map((it) =>
+      (async () => {
+        const rate = await getRate(it.currency, it.date).then((it) => it.rate);
+        const uah = Number(it.amount * rate);
+        const tax = taxFor(uah);
+        return {
+          ...it,
+          uah,
+          rate,
+          tax,
+        };
+      })(),
+    ),
+  );
+  return incomes;
 };
 
 // '10.04.2023' => Date
@@ -71,7 +93,7 @@ export const validate = (args: { date: Date; amount: number }) =>
       (error) =>
         error.issues.map((it: { path: string[] }) => it.path[0]) as Promise<
           string[]
-        >
+        >,
     )
     .then(() => []);
 
@@ -80,8 +102,8 @@ export const getRate = (currency: string, date: Date): Promise<Rate> =>
   fetch(
     `https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?valcode=${currency}&date=${format(
       date,
-      "yyyyMMdd"
-    )}&json`
+      "yyyyMMdd",
+    )}&json`,
   )
     .then((it) => it.json())
     .then((rates) => rates[0]);
